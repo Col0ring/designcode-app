@@ -7,6 +7,11 @@ export const RootView = styled.View`
   background-color: #f0f3f5;
 `
 
+export const CardsContainer = styled.View`
+  flex-direction: row;
+  padding-left: 5px;
+`
+
 export const TitleBar = styled.View`
   position: relative;
   margin-top: 50px;
@@ -52,4 +57,9 @@ export const styles = StyleSheet.create({
   }
 })
 
-export const Message = styled.Text``
+export const Message = styled.Text`
+  margin: 20px;
+  color: #b8bece;
+  font-size: 15px;
+  font-weight: 500;
+`

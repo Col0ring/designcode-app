@@ -20,7 +20,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = (props) => (
-  <Container>
+  <Container style={{ elevation: 10 }}>
     <Cover>
       <Image source={{ uri: props.image }} />
       <Title>{props.title}</Title>

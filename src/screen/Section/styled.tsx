@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 
 export const Container = styled.View`
-  flex: 1;
+  /* flex: 1; */
   background: #fff;
 `
 
@@ -11,12 +11,14 @@ export const ScrollContainer = styled.ScrollView`
 `
 
 export const Cover = styled.View`
+  position: relative;
   height: 375px;
 `
 
 export const Image = styled.Image`
   width: 100%;
   height: 100%;
+  z-index: -1;
   position: absolute;
 `
 
@@ -74,8 +76,8 @@ export const CloseView = styled.TouchableOpacity`
 `
 
 export const Content = styled.View`
-  height: 1100px;
-  padding: 20px;
+  min-height: 1000px;
+  padding: 12px;
 `
 
 export const PlayWrapper = styled.View`

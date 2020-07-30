@@ -5,7 +5,8 @@ import {
   Animated,
   Easing,
   StatusBar,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
@@ -24,7 +25,9 @@ import {
   Touchable,
   Name,
   Subtitle,
-  styles
+  styles,
+  CardsContainer,
+  Message
 } from './styled'
 
 const CardsQuery = gql`
@@ -173,7 +176,7 @@ const HomeScreen: React.FC = () => {
   const { action } = useSelector(({ home }) => ({ action: home.action }))
   const dispatch = useDispatch()
 
-  const { data } = useQuery(CardsQuery)
+  const { data, error } = useQuery(CardsQuery)
   const cards: Card[] | null = data?.cardsCollection.items
   const handleOpenMenu = () => {
     dispatch<ModelAction>({
@@ -182,6 +185,15 @@ const HomeScreen: React.FC = () => {
     })
   }
   const navigation = useNavigation()
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      StatusBar.setBarStyle('light-content', true)
+    } else {
+      StatusBar.setBarStyle('dark-content', true)
+    }
+  }, [])
+
   useEffect(() => {
     if (action === 'opened') {
       Animated.spring(scale, {
@@ -192,7 +204,6 @@ const HomeScreen: React.FC = () => {
         toValue: 0.5,
         useNativeDriver: false
       }).start()
-      StatusBar.setBarStyle('light-content', true)
     } else if (action === 'closed') {
       Animated.timing(scale, {
         toValue: 1,
@@ -204,7 +215,6 @@ const HomeScreen: React.FC = () => {
         toValue: 1,
         useNativeDriver: false
       }).start()
-      StatusBar.setBarStyle('dark-content', true)
     }
   }, [action])
   return (
@@ -249,25 +259,30 @@ const HomeScreen: React.FC = () => {
               horizontal
               showsHorizontalScrollIndicator={false}
             >
-              {cards &&
-                cards.map((card, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() =>
-                      navigation.navigate('Section', {
-                        section: card
-                      })
-                    }
-                  >
-                    <Card
-                      title={card.title}
-                      image={card.image.url}
-                      caption={card.caption}
-                      logo={card.logo.url}
-                      subtitle={card.subtitle}
-                    />
-                  </TouchableOpacity>
-                ))}
+              <CardsContainer>
+                {cards ? (
+                  cards.map((card, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() =>
+                        navigation.navigate('Section', {
+                          section: card
+                        })
+                      }
+                    >
+                      <Card
+                        title={card.title}
+                        image={card.image.url}
+                        caption={card.caption}
+                        logo={card.logo.url}
+                        subtitle={card.subtitle}
+                      />
+                    </TouchableOpacity>
+                  ))
+                ) : (
+                  <Message>{error ? 'Loaded Error' : 'Loading...'}</Message>
+                )}
+              </CardsContainer>
             </ScrollView>
             <Subtitle>Popular Courses</Subtitle>
             {courses.map((course, index) => (

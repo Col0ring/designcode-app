@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { StatusBar, Linking } from 'react-native'
 import Markdown from 'react-native-showdown'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { PlayIcon } from '../../components/Icons'
+import { PlayIcon } from '@/components/Icons'
 
 function Section() {
   const navigation = useNavigation()
@@ -27,19 +27,19 @@ function Section() {
 
   const section = (route.params as AnyObject)?.section
 
-  useEffect(() => {
-    StatusBar.setBarStyle('light-content', true)
-    return () => {
-      StatusBar.setBarStyle('dark-content', true)
-    }
-  }, [])
+  // useEffect(() => {
+  //   StatusBar.setHidden(true)
+  //   return () => {
+  //     StatusBar.setHidden(false)
+  //   }
+  // }, [])
 
   return (
     <>
       <ScrollContainer>
         <Container>
           <Cover>
-            <Image source={section.image} />
+            <Image source={{ uri: section.image.url }} />
             <PlayWrapper>
               <TouchableOpacity
                 onPress={() => {
@@ -52,27 +52,26 @@ function Section() {
               </TouchableOpacity>
             </PlayWrapper>
             <Wrapper>
-              <Logo source={section.logo} />
+              <Logo source={section.logo.rul} />
               <Subtitle>{section.subtitle}</Subtitle>
             </Wrapper>
             <Title>{section.title}</Title>
             <Caption>{section.caption}</Caption>
+            <CloseView onPress={() => navigation.goBack()}>
+              <Ionicons
+                name="ios-close"
+                size={36}
+                color="#4775f2"
+                style={{ marginTop: -2 }}
+              />
+            </CloseView>
           </Cover>
-          <CloseView onPress={() => navigation.goBack()}>
-            <Ionicons
-              name="ios-close"
-              size={36}
-              color="#4775f2"
-              style={{ marginTop: -2 }}
-            />
-          </CloseView>
           <Content>
             <Markdown
               markdown={section.content}
-              body={section.content}
-              pureCSS={htmlStyles}
+              css={htmlStyles}
               scalesPageToFit={false}
-              scrollEnabled={false}
+              scrollEnabled={true}
               onNavigationStateChange={(event: any) => {
                 if (event.url != 'about:blank') {
                   Linking.openURL(event.url)
